@@ -1,0 +1,41 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "MinMax/1.0.0": {
+        "dependencies": {
+          "DotNetGraph": "2.4.0"
+        },
+        "runtime": {
+          "MinMax.dll": {}
+        }
+      },
+      "DotNetGraph/2.4.0": {
+        "runtime": {
+          "lib/netstandard2.0/DotNetGraph.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "MinMax/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "DotNetGraph/2.4.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-VUafMGB/RfYhSYbrQtl3Fi40yvClo51IDWD1jfqGHAn4xGgnHskDYfOLzpuecKh4AdRicCLq58YXhKXStRultA==",
+      "path": "dotnetgraph/2.4.0",
+      "hashPath": "dotnetgraph.2.4.0.nupkg.sha512"
+    }
+  }
+}
