@@ -31,19 +31,27 @@ namespace ConsoleApp38
     }
     public class Node
     {
+        //Aktualna liczba punktow w ruchu
         public int Value = 0;
+        //Nazwa gracza
         public string Player;
+        //Odniesienia do wierzcholkow
         public Node ParentNode;
         public Node LNode;
         public Node MNode;
         public Node RNode;
+        //Obrazowanie wierzcholka
         public DotNode drawNode;
+        //Czy juz objechany przez algorytm
         public bool IsClosed = false;
 
-
+        //Statyczne wlasciwosci
+        //To jest graf
         public static DotGraph graph = new DotGraph("MyGraph", true);
+        //Liczba wierzcholkow aby kazdy sie nazywal inaczej
         public static int nodeCount = 0;
-
+        
+        //Funkcja sprawdzajaca czy juz nie ma po co 
         public bool CheckIsClosed()
         {
             if (this.LNode.Value > 21)
@@ -53,8 +61,10 @@ namespace ConsoleApp38
             }
             return false;
         }
+        //Tworzenei wierzcholkow
         public void CreateNodes()
         {
+            //Wybor gracza
             string temp = "prot";
             if (this.Player == "prot")
                 temp = "ant";
@@ -64,6 +74,7 @@ namespace ConsoleApp38
             var tempNode = this.LNode;
             if (this.Value < 18)
             {
+                //Funkcja tworzaca wierzcholek do zobrazowania
                 CreateDrawNode(tempNode, 4.ToString());
             }
             else
@@ -98,12 +109,14 @@ namespace ConsoleApp38
             }
 
         }
+        //Funkcja tworzaca drzewo
         public static void CreateTree(Node node)
         {
             if (node.Value < 21)
             {
                 if (node.LNode == null)
                 {
+                    //Wywolanie funkcji tworzacej wierzcholki
                     node.CreateNodes();
                     if (node.CheckIsClosed() == true && node.ParentNode != null)
                         CreateTree(node.ParentNode);
@@ -117,11 +130,13 @@ namespace ConsoleApp38
             }
             else
             {
+                //Jak juz wierzcholek zamkniety to leci w gore
                 node.IsClosed = true;
                 if (node.ParentNode != null)
                     CreateTree(node.ParentNode);
             }
         }
+        //Funkcja tworzaca wierzcholek do zobrazowania
         public static void CreateDrawNode(Node node, string val)
         {
             nodeCount++;
