@@ -36,22 +36,32 @@ namespace ConsoleApp38
         }
         public class Node
         {
+            //Aktualny wynik rozgrywki
             public int Value = 0;
+            //Gracz
             public string Player;
+            //Odniesienia do sasiadujacych wierzcholkow
             public Node ParentNode;
             public Node LNode;
             public Node MNode;
             public Node RNode;
+            //Najlepszy ruch
             public Node bestMove;
+            //Wierzcholek do zobrazowania
             public DotNode drawNode;
+            //Wartosc ruchu
             public int? Wynik = null;
+            //To do tworzenia grafu
             public bool IsClosed = false;
+            //Glebokosc grafu
             public int depth = 0;
 
-
+            //Liczba wierzcholkow zeby sie nie powtarzaly
             public static int nodeCount = 0;
+            //Zobrazowany graf
             public static DotGraph graph = new DotGraph("MyGraph", true);
-
+            
+            //Spradzenie czy warto dalej robic dzieci
             public bool CheckIsClosed()
             {
                 if (this.LNode.Value > 21)
@@ -61,32 +71,37 @@ namespace ConsoleApp38
                 }
                 return false;
             }
+            //Tworzenei wierzcholkow
             public void CreateNodes()
             {
+                //Wybor gracza
                 string temp = "prot";
                 if (this.Player == "prot")
                     temp = "ant";
                 //Left side
                 this.LNode = new Node() { ParentNode = this, Value = this.Value + 4, Player = temp };
+                //Mid
                 if (this.Value < 17)
                 {
-                    //Mid
                     this.MNode = new Node() { ParentNode = this, Value = this.Value + 5, Player = temp };
                 }
+                //Right
                 if (this.Value < 16)
                 {
-                    //Right
                     this.RNode = new Node() { ParentNode = this, Value = this.Value + 6, Player = temp };
                 }
 
             }
+            ///Tworzenie drzewa
             public static void CreateTree(Node node)
             {
                 if (node.Value < 21)
                 {
                     if (node.LNode == null)
                     {
+                        //Funkcja tworzaca wierzcholki
                         node.CreateNodes();
+                        //Skok do gory
                         if (node.CheckIsClosed() == true && node.ParentNode != null)
                             CreateTree(node.ParentNode);
                     }
@@ -104,6 +119,7 @@ namespace ConsoleApp38
                         CreateTree(node.ParentNode);
                 }
             }
+            //Ustalenie wartosci ruchu
             public static void SetNodeValue(Node node)
             {
                 if (node.Value == 21)
@@ -117,11 +133,13 @@ namespace ConsoleApp38
                     node.Wynik = -100 + node.depth;
 
             }
+            //Wybranie najlepszego ruchu dla aktualnej pozycji
             public static Node SetBestMove(Node node)
             {
                 Node bestNode = node.LNode;
                 if (node.LNode != null && node.LNode.Wynik == null)
                 {
+                    //Ustalenie wartosci dla lewego itd..
                     SetNodeValue(node.LNode);
                 }
                 if (node.MNode != null && node.MNode.Wynik == null)
@@ -132,7 +150,8 @@ namespace ConsoleApp38
                 {
                     SetNodeValue(node.RNode);
                 }
-
+                
+                //Wybor najlepszego wierzcholka jezeli gracz prot to wybiera wierzcholek o wiekszej wartosci
                 if (node.Player == "prot")
                 {
                     if (node.MNode != null && node.MNode.Wynik > bestNode.Wynik)
@@ -144,6 +163,7 @@ namespace ConsoleApp38
                         bestNode = node.RNode;
                     }
                 }
+                //Jezeli ant to wybiera ten o nizszej wartosci
                 else
                 {
                     if (node.MNode != null && node.MNode.Wynik < bestNode.Wynik)
@@ -155,18 +175,21 @@ namespace ConsoleApp38
                         bestNode = node.RNode;
                     }
                 }
-
+                //Przypisanie najlepszej wartosci dla wierzcholka
                 if (bestNode != null)
                 {
                     node.Wynik = bestNode.Wynik;
                 }
+                //No i zwrocenie najlepszego ruchu
                 return bestNode;
             }
+            //Algorytm min-max
             public static void MinMaxAlgorithm(Node node)
             {
                 {
                     if (node.bestMove == null)
                     {
+                        //Wyowlanie na lewo srodek i dol
                         if (node.LNode != null)
                         {
                             node.LNode.depth = node.depth + 1;
@@ -189,6 +212,7 @@ namespace ConsoleApp38
                     }
                 }
             }
+            //Wyswietlenie sciezki gdyby kazdy wybieral najlepszy ruch
             public static void ShowResult(Node node)
             {
                 if (node.bestMove != null)
@@ -198,7 +222,8 @@ namespace ConsoleApp38
                     ShowResult(node.bestMove);
                 }
             }
-
+            
+            //Tworzenie wiercholka graficznego
             public static void CreateDrawNode(Node node, string val)
             {
                 string label = "";
@@ -226,6 +251,7 @@ namespace ConsoleApp38
                 { Label = val, Color = color });
 
             }
+            //Tworzenei calego grafu graficznego
             public static void CreateGraph(Node node)
             {
                 if (node.LNode == null && node.ParentNode != null)
